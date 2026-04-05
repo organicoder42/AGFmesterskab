@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGF Mesterskabsscenarier 2026</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1f2236; color: #e0e0e0; padding: 20px; min-height: 100vh; }
+  h1 { text-align: center; font-size: 1.8em; margin-bottom: 4px; background: linear-gradient(90deg, #ffffff, #cc2228); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .subtitle { text-align: center; color: #888; font-size: 0.9em; margin-bottom: 24px; }
+  
+  .current-standing { background: linear-gradient(135deg, #1f2236, #2d4465); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+  .current-standing h2 { font-size: 1.1em; color: #ffffff; margin-bottom: 12px; }
+  .standing-table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+  .standing-table th { text-align: left; padding: 6px 8px; color: #888; border-bottom: 1px solid rgba(255,255,255,0.15); font-weight: 500; }
+  .standing-table td { padding: 6px 8px; border-bottom: 1px solid #2d4465; }
+  .standing-table tr.agf { background: rgba(110,193,228,0.08); }
+  .standing-table tr.agf td:first-child { font-weight: 700; color: #ffffff; }
+  .standing-table .pts { font-weight: 700; color: #fff; }
+  .gap { color: #cc2228; font-size: 0.85em; }
+  
+  .key-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .fact-card { background: linear-gradient(135deg, #1f2236, #2d4465); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 16px; text-align: center; }
+  .fact-card .number { font-size: 2em; font-weight: 800; color: #ffffff; }
+  .fact-card .label { font-size: 0.8em; color: #999; margin-top: 4px; }
+  
+  .section { background: linear-gradient(135deg, #1f2236, #2d4465); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+  .section h2 { font-size: 1.1em; color: #ffffff; margin-bottom: 12px; }
+  .section h3 { font-size: 0.95em; color: #cc2228; margin: 16px 0 8px; }
+  
+  .schedule-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 8px; margin-bottom: 6px; font-size: 0.88em; }
+  .schedule-row.played { background: rgba(255,255,255,0.03); color: #666; }
+  .schedule-row.upcoming { background: rgba(110,193,228,0.06); }
+  .schedule-row.key-match { background: rgba(255,167,38,0.1); border-left: 3px solid #cc2228; }
+  .round-label { font-weight: 700; min-width: 28px; color: #888; }
+  .date-label { min-width: 70px; color: #777; }
+  .match-label { flex: 1; }
+  .result-badge { padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.85em; }
+  .win { background: rgba(76,175,80,0.2); color: #66bb6a; }
+  .draw { background: rgba(255,167,38,0.2); color: #cc2228; }
+  .loss { background: rgba(244,67,54,0.2); color: #ef5350; }
+  .tbd { background: rgba(110,193,228,0.15); color: #ffffff; }
+  
+  .scenario-box { border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+  .scenario-box.best { border-color: #4caf50; background: rgba(76,175,80,0.05); }
+  .scenario-box.realistic { border-color: #ffffff; background: rgba(110,193,228,0.05); }
+  .scenario-box.worst { border-color: #ef5350; background: rgba(244,67,54,0.05); }
+  .scenario-title { font-weight: 700; font-size: 1em; margin-bottom: 6px; }
+  .scenario-box.best .scenario-title { color: #66bb6a; }
+  .scenario-box.realistic .scenario-title { color: #ffffff; }
+  .scenario-box.worst .scenario-title { color: #ef5350; }
+  .scenario-detail { font-size: 0.88em; line-height: 1.6; color: #bbb; }
+  .scenario-detail strong { color: #fff; }
+  
+  .magic-number { text-align: center; padding: 20px; }
+  .magic-number .big { font-size: 4em; font-weight: 900; color: #ffffff; line-height: 1; }
+  .magic-number .desc { font-size: 0.85em; color: #999; margin-top: 8px; }
+  
+  .bar-chart { margin-top: 12px; }
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .bar-team { min-width: 50px; font-size: 0.85em; font-weight: 600; text-align: right; }
+  .bar-container { flex: 1; height: 28px; background: rgba(255,255,255,0.05); border-radius: 6px; position: relative; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; padding-left: 8px; font-size: 0.8em; font-weight: 700; transition: width 0.5s; }
+  .bar-current { background: linear-gradient(90deg, #2d4465, #4a6a8a); }
+  .bar-max { position: absolute; top: 0; right: 0; height: 100%; background: rgba(255,255,255,0.08); border-left: 2px dashed rgba(255,255,255,0.2); display: flex; align-items: center; padding: 0 6px; font-size: 0.75em; color: #888; }
+  .bar-fill.agf-bar { background: linear-gradient(90deg, #2d4465, #ffffff); }
+  
+  .timeline { position: relative; padding-left: 30px; margin-top: 12px; }
+  .timeline::before { content: ''; position: absolute; left: 12px; top: 0; bottom: 0; width: 2px; background: rgba(255,255,255,0.15); }
+  .timeline-item { position: relative; margin-bottom: 16px; padding: 10px 14px; background: rgba(255,255,255,0.03); border-radius: 8px; font-size: 0.88em; }
+  .timeline-item::before { content: ''; position: absolute; left: -24px; top: 14px; width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 2px solid #ffffff; }
+  .timeline-item.clinch::before { background: #4caf50; border-color: #66bb6a; box-shadow: 0 0 8px rgba(76,175,80,0.4); }
+  .timeline-date { font-weight: 600; color: #ffffff; }
+  .timeline-desc { color: #bbb; margin-top: 2px; }
+  
+  .highlight { color: #cc2228; font-weight: 600; }
+  .green { color: #66bb6a; }
+  .red { color: #ef5350; }
+  
+  .footer { text-align: center; color: #555; font-size: 0.75em; margin-top: 20px; padding-top: 16px; border-top: 1px solid #2d4465; }
+</style>
+</head>
+<body>
+
+<h1>🏆 AGF's vej mod mesterskabet</h1>
+<p class="subtitle">Superliga 2025/26 — Mesterskabsspil · Opdateret 5. april 2026</p>
+
+<div class="key-facts">
+  <div class="fact-card">
+    <div class="number">52</div>
+    <div class="label">AGF's point (24 kampe)</div>
+  </div>
+  <div class="fact-card">
+    <div class="number">+4</div>
+    <div class="label">Forspring til FCM (+ 1 kamp i hånden)</div>
+  </div>
+  <div class="fact-card">
+    <div class="number">8</div>
+    <div class="label">Kampe tilbage for AGF</div>
+  </div>
+  <div class="fact-card">
+    <div class="number">76</div>
+    <div class="label">AGF's max mulige point</div>
+  </div>
+</div>
+
+<div class="current-standing">
+  <h2>📊 Aktuel stilling — Mesterskabsspil</h2>
+  <table class="standing-table">
+    <tr><th>#</th><th>Hold</th><th>K</th><th>V</th><th>U</th><th>T</th><th>Mål</th><th class="pts">P</th><th>Rest</th><th>Max P</th></tr>
+    <tr class="agf"><td>1.</td><td>AGF</td><td>24</td><td>15</td><td>7</td><td>2</td><td>47-24</td><td class="pts">52</td><td>8</td><td>76</td></tr>
+    <tr><td>2.</td><td>FC Midtjylland</td><td>25</td><td>13</td><td>9</td><td>3</td><td>61-27</td><td class="pts">48</td><td>7</td><td>69</td></tr>
+    <tr><td>3.</td><td>Sønderjyske</td><td>25</td><td>10</td><td>8</td><td>7</td><td>37-33</td><td class="pts">38</td><td>7</td><td>59</td></tr>
+    <tr><td>4.</td><td>Viborg FF</td><td>24</td><td>11</td><td>4</td><td>9</td><td>39-36</td><td class="pts">37</td><td>8</td><td>61</td></tr>
+    <tr><td>5.</td><td>FC Nordsjælland</td><td>24</td><td>12</td><td>1</td><td>11</td><td>40-39</td><td class="pts">37</td><td>8</td><td>61</td></tr>
+    <tr><td>6.</td><td>Brøndby IF</td><td>24</td><td>10</td><td>5</td><td>9</td><td>31-23</td><td class="pts">35</td><td>8</td><td>59</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h2>⚽ AGF's resterende kampe</h2>
+  <div class="schedule-row upcoming"><span class="round-label">R25</span><span class="date-label">6. apr</span><span class="match-label">Viborg FF – <strong>AGF</strong> (ude)</span><span class="result-badge tbd">Kommende</span></div>
+  <div class="schedule-row upcoming"><span class="round-label">R26</span><span class="date-label">10. apr</span><span class="match-label"><strong>AGF</strong> – FC Nordsjælland (hjemme)</span><span class="result-badge tbd">Kommende</span></div>
+  <div class="schedule-row key-match"><span class="round-label">R27</span><span class="date-label">20. apr</span><span class="match-label">FC Midtjylland – <strong>AGF</strong> (ude) ⭐</span><span class="result-badge tbd">GULDDUEL</span></div>
+  <div class="schedule-row upcoming"><span class="round-label">R28</span><span class="date-label">23. apr</span><span class="match-label">FC Nordsjælland – <strong>AGF</strong> (ude)</span><span class="result-badge tbd">Kommende</span></div>
+  <div class="schedule-row key-match"><span class="round-label">R29</span><span class="date-label">26. apr</span><span class="match-label"><strong>AGF</strong> – FC Midtjylland (hjemme) ⭐</span><span class="result-badge tbd">GULDDUEL</span></div>
+  <div class="schedule-row upcoming"><span class="round-label">R30</span><span class="date-label">3. maj</span><span class="match-label"><strong>AGF</strong> – Sønderjyske (hjemme)</span><span class="result-badge tbd">Kommende</span></div>
+  <div class="schedule-row upcoming"><span class="round-label">R31</span><span class="date-label">10. maj</span><span class="match-label">Brøndby IF – <strong>AGF</strong> (ude)</span><span class="result-badge tbd">Kommende</span></div>
+  <div class="schedule-row upcoming"><span class="round-label">R32</span><span class="date-label">17. maj</span><span class="match-label"><strong>AGF</strong> – Viborg FF (hjemme)</span><span class="result-badge tbd">Sidste kamp</span></div>
+</div>
+
+<div class="section">
+  <h2>🔢 Magic Number</h2>
+  <div class="magic-number">
+    <div class="big">18</div>
+    <div class="desc">AGF's "magic number" — enhver kombination af AGF-point + FCM-tabte point der summer til 18 sikrer mesterskabet.<br>F.eks. 6 AGF-sejre (uanset FCM's resultater) eller 4 AGF-sejre + 2 FCM-nederlag.</div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>📈 Point-potentiale</h2>
+  <div class="bar-chart">
+    <div class="bar-row">
+      <span class="bar-team" style="color:#ffffff">AGF</span>
+      <div class="bar-container">
+        <div class="bar-fill agf-bar" style="width:68.4%">52p</div>
+        <div class="bar-max" style="width:0%">max 76</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-team">FCM</span>
+      <div class="bar-container">
+        <div class="bar-fill bar-current" style="width:63.2%">48p</div>
+        <div class="bar-max" style="width:9.2%">max 69</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-team">SJF</span>
+      <div class="bar-container">
+        <div class="bar-fill bar-current" style="width:50%">38p</div>
+        <div class="bar-max" style="width:27.6%">max 59</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-team">VFF</span>
+      <div class="bar-container">
+        <div class="bar-fill bar-current" style="width:48.7%">37p</div>
+        <div class="bar-max" style="width:31.6%">max 61</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-team">FCN</span>
+      <div class="bar-container">
+        <div class="bar-fill bar-current" style="width:48.7%">37p</div>
+        <div class="bar-max" style="width:31.6%">max 61</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <span class="bar-team">BIF</span>
+      <div class="bar-container">
+        <div class="bar-fill bar-current" style="width:46.1%">35p</div>
+        <div class="bar-max" style="width:31.6%">max 59</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>🎯 Scenarier</h2>
+
+  <div class="scenario-box best">
+    <div class="scenario-title">🟢 Bedste scenarie: Guldet 26. april (R29)</div>
+    <div class="scenario-detail">
+      <strong>Hvis AGF vinder alle 5 kampe t.o.m. R29</strong> (inkl. begge gulddueller mod FCM), ender AGF på <strong>67 point</strong> efter R29.<br><br>
+      Selv hvis FCM vinder alle deres øvrige kampe, kan de maksimalt nå <strong>63 point</strong> med 3 kampe tilbage — mesterskabet er matematisk sikret!<br><br>
+      📅 <strong>Tidligst mulige gulddag: Søndag 26. april 2026</strong> — hjemme mod FCM på Ceres Park.<br>
+      Det ville være den perfekte kulisse: guldet sikret i det direkte opgør foran hjemmepublikummet.
+    </div>
+  </div>
+
+  <div class="scenario-box realistic">
+    <div class="scenario-title">🔵 Realistisk scenarie: Guldet i starten af maj (R30-R31)</div>
+    <div class="scenario-detail">
+      <strong>Hvis AGF vinder 5 og uafgjort 3</strong> af de resterende 8 kampe (18 point), ender AGF på <strong>70 point</strong>.<br><br>
+      FCM's max er 69, så selv ét uafgjort for FCM i den situation vil sikre AGF guldet.<br><br>
+      Et mere konservativt scenarie med <strong>4 sejre og 4 uafgjorte</strong> (16 point) giver AGF <strong>68 point</strong>. FCM skal så vinde 7 af 7 for at nå 69 — usandsynligt.<br><br>
+      📅 <strong>Sandsynlig gulddag: 26. april – 10. maj 2026</strong>
+    </div>
+  </div>
+
+  <div class="scenario-box worst">
+    <div class="scenario-title">🔴 Værste scenarie: Det trækker ud til R32</div>
+    <div class="scenario-detail">
+      <strong>Hvis AGF taber begge kampe mod FCM</strong> og FCM vinder alt, indsnævres forspringet markant.<br><br>
+      Eksempel: AGF vinder 4, taber 2 (mod FCM), uafgjort 2 = 52 + 14 = <strong>66 point</strong><br>
+      FCM vinder 7 af 7 = 48 + 21 = <strong>69 point → FCM overhaler!</strong><br><br>
+      I dette scenarie afhænger alt af AGF's resultater i de øvrige kampe. AGF skal kompensere for tabte point mod FCM ved at vinde de 6 andre kampe.<br><br>
+      📅 <strong>Guldafgørelse: 17. maj 2026 (sidste spillerunde)</strong>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>🗓️ Nøgledatoer i guldkampen</h2>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-date">6. april — R25: Viborg FF – AGF</div>
+      <div class="timeline-desc">AGF's første mulighed for at øge forspringet. Viborg har været i god form.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">10. april — R26: AGF – FC Nordsjælland</div>
+      <div class="timeline-desc">Hjemmekamp. Vigtig at vinde inden de to gulddueller.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">20. april — R27: FC Midtjylland – AGF ⭐</div>
+      <div class="timeline-desc"><span class="highlight">1. GULDDUEL</span> — Ude i Herning. Hver sejr her svinger 6 point i pointregnskabet. Kolossalt vigtig kamp.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">23. april — R28: FC Nordsjælland – AGF</div>
+      <div class="timeline-desc">Kun 3 dage efter FCM-kampen. Udekamp i Farum. Rotationsudfordringer?</div>
+    </div>
+    <div class="timeline-item clinch">
+      <div class="timeline-date">26. april — R29: AGF – FC Midtjylland ⭐</div>
+      <div class="timeline-desc"><span class="highlight">2. GULDDUEL</span> — Hjemme på Ceres Park. <span class="green">Tidligst mulige gulddag!</span> Sejr her + sejre i R25-R28 = mesterskabet er sikret.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">3. maj — R30: AGF – Sønderjyske</div>
+      <div class="timeline-desc">Hjemmekamp. Kan blive guldkampen hvis det ikke er afgjort endnu.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">10. maj — R31: Brøndby IF – AGF</div>
+      <div class="timeline-desc">Udekamp på Brøndby Stadion. Brøndby kan blive "kongemager" i guldkampen.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">17. maj — R32: AGF – Viborg FF</div>
+      <div class="timeline-desc">Sidste spillerunde. Hjemmekamp. Seneste mulige gulddag.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>🔑 Nøgletal og konklusion</h2>
+  <div class="scenario-detail" style="line-height:1.8">
+    <strong>AGF fører med 4 point + 1 kamp i hånden.</strong> Det er en stærk position, men med to direkte opgør mod FCM inden for 6 dage (R27 + R29) kan sæsonen vende hurtigt.<br><br>
+    
+    <strong>De to FCM-kampe er alt:</strong> Hvis AGF vinder begge, er mesterskabet praktisk talt sikret. Hvis FCM vinder begge, er det helt åbent.<br><br>
+    
+    <strong>Brøndby som kongemager:</strong> BIF møder FCM i R26 (ude) og R32 (hjemme) — og AGF i R31 (hjemme). Brøndby kan dermed få stor indflydelse på, hvor guldet ender.<br><br>
+    
+    <strong>AGF's sæson i tal:</strong> 15 sejre, 7 uafgjorte, kun 2 nederlag. Bedste forsvar i mesterskabsspillet med kun 24 indkasserede mål. Patrick Mortensen er topscorer i Superligaen med 20 mål i 2024/25 — og AGF's offensiv har fortsat med at levere.
+  </div>
+</div>
+
+<div class="footer">
+  Data fra superstats.dk · Beregninger pr. 5. april 2026 · Med forbehold for ændringer i kampprogrammet
+</div>
+
+</body>
+</html>
